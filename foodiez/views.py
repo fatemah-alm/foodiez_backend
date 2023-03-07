@@ -3,6 +3,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from .models import Ingredient, Recipie, Category
 from .serializers import CategoryDetailSerializer, CategoryListSerializer, RecipeListSerializer, IngredientListSerializer, RecipeDetailSerializer,IngredientDetailSerializer
 from rest_framework.permissions import IsAuthenticated
+from .permissions import IsOwnerOrReadOnly
 # Create your views here.
 
 class CategoryListView(ListCreateAPIView):
@@ -19,7 +20,7 @@ class CategoryDetailView(RetrieveUpdateDestroyAPIView):
 class RecipeListView(ListCreateAPIView):
     queryset = Recipie.objects.all()
     serializer_class = RecipeListSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwnerOrReadOnly]
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
